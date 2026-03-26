@@ -16,7 +16,7 @@ const actions = [
 
 export function DashboardContent() {
   return (
-    <section className="mx-auto max-w-5xl">
+    <section className="mx-auto max-w-[920px]">
       <header>
         <p className="text-sm font-semibold uppercase tracking-[0.18em] text-slate-500">NourishFlow</p>
         <h1 className="mt-3 text-4xl font-bold text-brandNavy sm:text-5xl">Home Dashboard</h1>
@@ -31,7 +31,7 @@ export function DashboardContent() {
         ))}
       </div>
 
-      <div className="mt-8 rounded-xxl border border-slate-200/70 bg-white p-5 shadow-card sm:p-6">
+      <div className="mt-8 rounded-xxl border border-slate-200/70 bg-[#fafafa] p-5 shadow-card sm:p-6">
         <h2 className="text-2xl font-semibold text-brandNavy">Quick Actions</h2>
         <div className="mt-4 grid gap-4 md:grid-cols-2">
           {actions.map((action) => (
@@ -41,7 +41,7 @@ export function DashboardContent() {
       </div>
 
       <div className="mt-8 max-w-sm">
-        <GradientButton href="/" label="Back to Onboarding" />
+        <GradientButton href="/" label="Back" />
       </div>
     </section>
   );
