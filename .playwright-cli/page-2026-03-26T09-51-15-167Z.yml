@@ -1,0 +1,8 @@
+- generic [ref=e4]:
+  - generic [ref=e5]:
+    - heading "What's your name?" [level=2] [ref=e39]
+    - paragraph [ref=e40]: Let's personalize your experience
+  - textbox "Enter your name" [active] [ref=e41]: Alex
+  - button "Continue" [ref=e43]:
+    - text: Continue
+    - img

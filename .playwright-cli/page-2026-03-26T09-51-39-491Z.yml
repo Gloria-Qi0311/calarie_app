@@ -1,0 +1,18 @@
+- generic [ref=e4]:
+  - generic [ref=e5]:
+    - heading "What's your goal?" [level=2] [ref=e44]
+    - paragraph [ref=e40]: This helps us give better guidance
+  - generic [ref=e45]:
+    - button "Lose fat ~1,800 calories/day" [ref=e46]:
+      - generic [ref=e47]: Lose fat
+      - generic [ref=e48]: ~1,800 calories/day
+    - button "Maintain weight ~2,200 calories/day" [ref=e49]:
+      - generic [ref=e50]: Maintain weight
+      - generic [ref=e51]: ~2,200 calories/day
+    - button "Custom goal Set your own daily target" [ref=e52]:
+      - generic [ref=e53]: Custom goal
+      - generic [ref=e54]: Set your own daily target
+  - generic [ref=e42]:
+    - button "Continue" [disabled]:
+      - text: Continue
+      - img

@@ -1,0 +1,12 @@
+- generic [ref=e5]:
+  - generic [ref=e7]: NourishFlow
+  - generic [ref=e10]:
+    - button "Interact with mascot" [ref=e12] [cursor=pointer]:
+      - img [ref=e23]
+    - generic [ref=e43]:
+      - heading "Welcome" [level=1] [ref=e44]
+      - paragraph [ref=e45]: Your little wellness buddy is ready.
+    - generic [ref=e46]: Tap the buddy, then start when you’re ready.
+    - button "Start" [ref=e47]:
+      - text: Start
+      - img

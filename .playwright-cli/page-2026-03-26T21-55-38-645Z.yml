@@ -1,0 +1,30 @@
+- generic [ref=e5]:
+  - generic [ref=e7]: NourishFlow
+  - generic [ref=e10]:
+    - button "Interact with mascot" [ref=e12] [cursor=pointer]:
+      - img [ref=e23]
+    - generic [ref=e43]:
+      - heading "Log in" [level=1] [ref=e48]
+      - paragraph [ref=e45]: A tiny buddy, then straight in.
+    - generic [ref=e46]:
+      - button "Log in" [ref=e49]
+      - button "Register" [ref=e50]
+    - generic [ref=e51]:
+      - generic [ref=e52]:
+        - generic [ref=e53]: Name
+        - textbox "Name" [ref=e54]:
+          - /placeholder: Your name
+          - text: Alex
+      - generic [ref=e55]:
+        - generic [ref=e56]:
+          - generic [ref=e57]: Password
+          - generic [ref=e58]: privacy mode
+        - textbox "Password privacy mode" [active] [ref=e63]:
+          - /placeholder: ••••••••
+          - text: secret12
+    - generic [ref=e60]: No peeking.
+    - generic [ref=e61]:
+      - button "Back" [ref=e62]
+      - button "Next" [ref=e64]:
+        - text: Next
+        - img

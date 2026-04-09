@@ -1,1 +1,30 @@
-
+{
+  "name": "calarie-app-workspace",
+  "private": true,
+  "scripts": {
+    "app:build:remote": "npm --prefix Caloriedecisionsupportapp run build:remote",
+    "app:dev:remote": "npm --prefix Caloriedecisionsupportapp run dev:remote",
+    "api:dev": "node --env-file=.env.server server/index.mjs",
+    "api:dev:mock": "CALORIE_APP_REPOSITORY=mock node --env-file=.env.server server/index.mjs",
+    "api:dev:postgres": "CALORIE_APP_REPOSITORY=postgres node --env-file=.env.server server/index.mjs",
+    "api:preflight": "node --env-file=.env.server server/scripts/preflight.mjs",
+    "api:preflight:postgres": "CALORIE_APP_REPOSITORY=postgres node --env-file=.env.server server/scripts/preflight.mjs",
+    "api:preflight:postgres:live": "CALORIE_APP_REPOSITORY=postgres CALORIE_APP_PREFLIGHT_LIVE=1 node --env-file=.env.server server/scripts/preflight.mjs",
+    "api:preflight:postgres:deep": "CALORIE_APP_REPOSITORY=postgres CALORIE_APP_PREFLIGHT_LIVE=1 CALORIE_APP_PREFLIGHT_DEEP=1 node --env-file=.env.server server/scripts/preflight.mjs",
+    "api:bootstrap:postgres": "CALORIE_APP_REPOSITORY=postgres node --env-file=.env.server server/scripts/bootstrap-profile.mjs",
+    "api:seed": "node --env-file=.env.server server/scripts/seed-demo-data.mjs",
+    "api:seed:postgres": "CALORIE_APP_REPOSITORY=postgres node --env-file=.env.server server/scripts/seed-demo-data.mjs",
+    "api:prepare": "node --env-file=.env.server server/scripts/prepare-demo-user.mjs",
+    "api:prepare:postgres": "CALORIE_APP_REPOSITORY=postgres node --env-file=.env.server server/scripts/prepare-demo-user.mjs",
+    "api:validate": "node --env-file=.env.server server/scripts/validate-stack.mjs",
+    "api:validate:postgres": "CALORIE_APP_REPOSITORY=postgres node --env-file=.env.server server/scripts/validate-stack.mjs",
+    "api:recompute": "node --env-file=.env.server server/scripts/recompute-summaries.mjs",
+    "api:recompute:postgres": "CALORIE_APP_REPOSITORY=postgres node --env-file=.env.server server/scripts/recompute-summaries.mjs",
+    "api:recompute:patterns": "node --env-file=.env.server server/scripts/recompute-patterns.mjs",
+    "api:recompute:patterns:postgres": "CALORIE_APP_REPOSITORY=postgres node --env-file=.env.server server/scripts/recompute-patterns.mjs",
+    "api:smoke": "node --env-file=.env.server server/scripts/smoke.mjs"
+  },
+  "workspaces": [
+    "Caloriedecisionsupportapp"
+  ]
+}

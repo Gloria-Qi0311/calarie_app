@@ -1,0 +1,23 @@
+- generic [ref=e4]:
+  - img [ref=e6]
+  - heading "Welcome to NourishFlow" [level=1] [ref=e8]
+  - paragraph [ref=e9]: Your calorie decision assistant that helps you eat with confidence. No complicated logging, just simple guidance.
+  - generic [ref=e10]:
+    - generic [ref=e11]:
+      - img [ref=e13]
+      - generic [ref=e17]:
+        - heading "Smart Decisions" [level=3] [ref=e18]
+        - paragraph [ref=e19]: Quick answers to "what can I eat?"
+    - generic [ref=e20]:
+      - img [ref=e22]
+      - generic [ref=e24]:
+        - heading "Minimal Effort" [level=3] [ref=e25]
+        - paragraph [ref=e26]: Log meals in seconds, not minutes
+    - generic [ref=e27]:
+      - img [ref=e29]
+      - generic [ref=e31]:
+        - heading "Supportive Guidance" [level=3] [ref=e32]
+        - paragraph [ref=e33]: Meal suggestions that fit your day
+  - button "Get Started" [ref=e34]:
+    - text: Get Started
+    - img

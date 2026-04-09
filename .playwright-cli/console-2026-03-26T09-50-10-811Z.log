@@ -1,0 +1,10 @@
+[     370ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:4173/favicon.ico:0
+[ 5524845ms] [ERROR] WebSocket connection to 'ws://127.0.0.1:4173/' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://127.0.0.1:4173/@vite/client:1034
+[ 5525849ms] [ERROR] WebSocket connection to 'ws://127.0.0.1:4173/' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://127.0.0.1:4173/@vite/client:1034
+[ 5526852ms] [ERROR] WebSocket connection to 'ws://127.0.0.1:4173/' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://127.0.0.1:4173/@vite/client:1034
+[ 5527853ms] [ERROR] WebSocket connection to 'ws://127.0.0.1:4173/' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://127.0.0.1:4173/@vite/client:1034
+[ 5528857ms] [ERROR] WebSocket connection to 'ws://127.0.0.1:4173/' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://127.0.0.1:4173/@vite/client:1034
+[ 5529862ms] [ERROR] WebSocket connection to 'ws://127.0.0.1:4173/' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://127.0.0.1:4173/@vite/client:1034
+[ 5530875ms] [ERROR] WebSocket connection to 'ws://127.0.0.1:4173/' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://127.0.0.1:4173/@vite/client:1034
+[ 5531893ms] [ERROR] WebSocket connection to 'ws://127.0.0.1:4173/' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://127.0.0.1:4173/@vite/client:1034
+[ 5532920ms] [ERROR] WebSocket connection to 'ws://127.0.0.1:4173/' failed: Error in connection establishment: net::ERR_CONNECTION_REFUSED @ http://127.0.0.1:4173/@vite/client:1034

@@ -1,0 +1,15 @@
+- generic [ref=e5]:
+  - generic [ref=e7]: Personalize my plan
+  - generic [ref=e9]:
+    - button "Go back" [ref=e66]:
+      - img [ref=e67]
+    - button "Interact with mascot" [ref=e74] [cursor=pointer]:
+      - img [ref=e85]
+    - generic [ref=e105]:
+      - heading "How old are you?" [level=1] [ref=e106]
+      - paragraph [ref=e107]: This helps me set a gentler baseline.
+    - spinbutton [active] [ref=e109]
+    - generic [ref=e110]: You can update this later.
+    - button "Next" [disabled]:
+      - text: Next
+      - img
