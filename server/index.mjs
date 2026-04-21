@@ -14,8 +14,12 @@ const server = createServer(async (request, response) => {
   repository.userContext = userContext;
   repository.ensure();
   const service = createAppService(repository);
+  const allowedOrigin = request.headers.origin || '*';
   const responseHeaders = {
     "X-Request-Id": requestId,
+    "Access-Control-Allow-Origin": allowedOrigin,
+    "Access-Control-Allow-Methods": "GET, POST, PUT, PATCH, DELETE, OPTIONS",
+    "Access-Control-Allow-Headers": "Content-Type, x-calorie-app-user-id, Authorization",
   };
 
   function logRequest(statusCode, meta) {
