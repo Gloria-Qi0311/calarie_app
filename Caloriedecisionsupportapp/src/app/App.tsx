@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect, useCallback } from 'react';
 import { MochiState } from './components/Mochi';
 import { NavBar, Screen } from './components/Nav';
 import { OnboardingScreen } from './components/Onboarding';
@@ -6,23 +6,55 @@ import { HomeScreen } from './components/Home';
 import { FoodLogScreen, MealEntryScreen, Food } from './components/FoodLog';
 import { ProgressScreen } from './components/Progress';
 import { SettingsScreen } from './components/Settings';
+import { api, Profile, IntakeEntry } from '../lib/api';
+
+function getUserId(): string {
+  let id = localStorage.getItem('fitty_user_id');
+  if (!id) {
+    id = crypto.randomUUID();
+    localStorage.setItem('fitty_user_id', id);
+  }
+  return id;
+}
 
 interface Meal {
+  id?: string;
   name: string;
   calories: number;
 }
 
 export default function App() {
+  const userId = useMemo(getUserId, []);
+
   const [onboarded, setOnboarded] = useState(() => localStorage.getItem('fitty_onboarded') === 'true');
   const [screen, setScreen] = useState<Screen>(() => (localStorage.getItem('fitty_screen') as Screen) || 'home');
-  const [userName, setUserName] = useState(() => localStorage.getItem('fitty_name') || 'you');
-  const [calorieGoal, setCalorieGoal] = useState(() => Number(localStorage.getItem('fitty_goal') || 1500));
-  const [meals, setMeals] = useState<Meal[]>([
-    { name: 'Breakfast', calories: 320 },
-    { name: 'Lunch', calories: 480 },
-    { name: 'Dinner', calories: 0 },
-  ]);
+  const [userName, setUserName] = useState('you');
+  const [calorieGoal, setCalorieGoal] = useState(1500);
+  const [meals, setMeals] = useState<Meal[]>([]);
   const [selectedFood, setSelectedFood] = useState<Food | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  const loadData = useCallback(async () => {
+    try {
+      const [profileRes, todayRes] = await Promise.all([
+        api.getProfile(userId),
+        api.getToday(userId),
+      ]);
+      setUserName(profileRes.profile.name || 'you');
+      setCalorieGoal(profileRes.profile.dailyCalorieTarget || 1500);
+      const entries: IntakeEntry[] = todayRes.intakeEntries || [];
+      setMeals(entries.map(e => ({ id: e.id, name: e.description, calories: e.calories })));
+    } catch {
+      // first time user — no profile yet, fall back to onboarding
+    } finally {
+      setLoading(false);
+    }
+  }, [userId]);
+
+  useEffect(() => {
+    if (onboarded) loadData();
+    else setLoading(false);
+  }, [onboarded, loadData]);
 
   const consumed = meals.reduce((a, m) => a + m.calories, 0);
 
@@ -34,48 +66,60 @@ export default function App() {
     return 'proud';
   }, [consumed, calorieGoal]);
 
+  const navigate = (s: Screen) => {
+    setScreen(s);
+    localStorage.setItem('fitty_screen', s);
+  };
+
+  const handleOnboardingComplete = async ({ name, goal }: { name: string; goal: number }) => {
+    try {
+      await api.updateProfile(userId, {
+        name,
+        dailyCalorieTarget: goal,
+      });
+    } catch { /* ignore, save locally */ }
+    setUserName(name);
+    setCalorieGoal(goal);
+    localStorage.setItem('fitty_onboarded', 'true');
+    setOnboarded(true);
+    navigate('home');
+  };
+
+  const handleAddFood = async (food: Food & { servings: number }) => {
+    try {
+      const res = await api.createIntake(userId, {
+        description: food.name,
+        calories: food.cal,
+        mealTag: 'dinner',
+      });
+      setMeals(prev => [...prev, { id: res.entry.id, name: food.name, calories: food.cal }]);
+    } catch {
+      setMeals(prev => [...prev, { name: food.name, calories: food.cal }]);
+    }
+    setTimeout(() => { setSelectedFood(null); navigate('home'); }, 900);
+  };
+
   const handleLogout = () => {
     localStorage.clear();
     setOnboarded(false);
     setScreen('home');
     setUserName('you');
     setCalorieGoal(1500);
-    setMeals([
-      { name: 'Breakfast', calories: 320 },
-      { name: 'Lunch', calories: 480 },
-      { name: 'Dinner', calories: 0 },
-    ]);
+    setMeals([]);
     setSelectedFood(null);
   };
 
-  const navigate = (s: Screen) => {
-    setScreen(s);
-    localStorage.setItem('fitty_screen', s);
-  };
-
-  const handleOnboardingComplete = ({ name, goal }: { name: string; goal: number }) => {
-    setUserName(name);
-    setCalorieGoal(goal);
-    localStorage.setItem('fitty_name', name);
-    localStorage.setItem('fitty_goal', String(goal));
-    localStorage.setItem('fitty_onboarded', 'true');
-    setOnboarded(true);
-    navigate('home');
-  };
-
-  const handleAddFood = (food: Food & { servings: number }) => {
-    setMeals(prev => {
-      const updated = [...prev];
-      const dinner = updated.find(m => m.name === 'Dinner');
-      if (dinner && dinner.calories === 0) {
-        dinner.calories = food.cal;
-      } else {
-        updated.push({ name: food.name, calories: food.cal });
-      }
-      return updated;
-    });
-    setTimeout(() => { setSelectedFood(null); navigate('home'); }, 900);
-  };
+  if (loading) {
+    return (
+      <div style={{
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        minHeight: '100vh', background: '#FDF6F0',
+        fontFamily: "'Nunito', sans-serif", fontSize: 16, color: '#C4A89A',
+      }}>
+        Loading…
+      </div>
+    );
+  }
 
   const renderScreen = () => {
     if (!onboarded) return <OnboardingScreen onComplete={handleOnboardingComplete} />;
@@ -93,7 +137,7 @@ export default function App() {
       case 'foodlog': return selectedFood
         ? <MealEntryScreen food={selectedFood} onAdd={handleAddFood} onBack={() => setSelectedFood(null)} mealType="Dinner" />
         : <FoodLogScreen onSelectFood={setSelectedFood} />;
-      case 'progress': return <ProgressScreen />;
+      case 'progress': return <ProgressScreen userId={userId} calorieGoal={calorieGoal} />;
       case 'settings': return <SettingsScreen userName={userName} calorieGoal={calorieGoal} onLogout={handleLogout} />;
       default: return null;
     }

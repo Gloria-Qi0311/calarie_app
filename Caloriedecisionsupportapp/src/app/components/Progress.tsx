@@ -1,14 +1,8 @@
+import { useState, useEffect } from 'react';
 import { MochiAnimated } from './Mochi';
+import { api } from '../../lib/api';
 
-const WEEK_DATA = [
-  { day: 'Mon', cal: 1420, goal: 1500 },
-  { day: 'Tue', cal: 1680, goal: 1500 },
-  { day: 'Wed', cal: 1350, goal: 1500 },
-  { day: 'Thu', cal: 1500, goal: 1500 },
-  { day: 'Fri', cal: 1290, goal: 1500 },
-  { day: 'Sat', cal: 1750, goal: 1500 },
-  { day: 'Sun', cal: 0, goal: 1500 },
-];
+const DAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
 function WeekChart({ data }: { data: typeof WEEK_DATA }) {
   const max = Math.max(...data.map(d => d.cal), data[0].goal);
@@ -118,8 +112,35 @@ function MochiGrowthStage() {
   );
 }
 
-export function ProgressScreen() {
-  const daysOnTrack = WEEK_DATA.filter(d => d.cal > 0 && d.cal <= d.goal).length;
+export function ProgressScreen({ userId, calorieGoal }: { userId: string; calorieGoal: number }) {
+  const [weekData, setWeekData] = useState(
+    Array.from({ length: 7 }, (_, i) => ({
+      day: DAYS[(new Date().getDay() - 6 + i + 7) % 7],
+      cal: 0,
+      goal: calorieGoal,
+    }))
+  );
+
+  useEffect(() => {
+    api.getHistory(userId, 7).then(res => {
+      const summaries = res.summaries || [];
+      setWeekData(
+        Array.from({ length: 7 }, (_, i) => {
+          const d = new Date();
+          d.setDate(d.getDate() - (6 - i));
+          const dateStr = d.toISOString().slice(0, 10);
+          const found = summaries.find(s => s.date === dateStr);
+          return {
+            day: DAYS[d.getDay()],
+            cal: found?.consumedCalories || 0,
+            goal: found?.goalCalories || calorieGoal,
+          };
+        })
+      );
+    }).catch(() => {});
+  }, [userId, calorieGoal]);
+
+  const daysOnTrack = weekData.filter(d => d.cal > 0 && d.cal <= d.goal).length;
 
   return (
     <div style={{ height: '100%', overflowY: 'auto', background: '#FDF6F0', fontFamily: "'Nunito', sans-serif", paddingBottom: 20 }}>
@@ -131,7 +152,7 @@ export function ProgressScreen() {
       <div style={{ margin: '20px 20px 0', display: 'flex', gap: 12 }}>
         <StatCard label="Day streak" value="5" unit="days" emoji="🔥" color="#FF8B7A" />
         <StatCard label="On target" value={daysOnTrack} unit="/ 7 days" emoji="🎯" color="#FFB5A7" />
-        <StatCard label="Avg calories" value="1,498" unit="kcal/day" emoji="📊" color="#FFD166" />
+        <StatCard label="Avg calories" value={weekData.filter(d => d.cal > 0).length ? Math.round(weekData.filter(d => d.cal > 0).reduce((a, d) => a + d.cal, 0) / weekData.filter(d => d.cal > 0).length).toLocaleString() : '—'} unit="kcal/day" emoji="📊" color="#FFD166" />
       </div>
 
       <div style={{ margin: '16px 20px 0', background: '#fff', borderRadius: 24, padding: '20px', boxShadow: '0 4px 16px rgba(255,140,120,0.07)' }}>
@@ -148,9 +169,9 @@ export function ProgressScreen() {
             </div>
           </div>
         </div>
-        <WeekChart data={WEEK_DATA} />
+        <WeekChart data={weekData} />
         <div style={{ textAlign: 'center', marginTop: 12, fontSize: 13, color: '#C4A89A' }}>
-          Goal: 1,500 kcal / day
+          Goal: {calorieGoal.toLocaleString()} kcal / day
         </div>
       </div>
 
